@@ -6,6 +6,7 @@ import {
   FaPlus,
   FaMinus,
   FaEquals,
+  FaAngleLeft,
 } from 'react-icons/fa';
 
 import { Container, Result, CalculatorKeyboard } from './styles';
@@ -25,6 +26,8 @@ export default class Calculator extends Component {
     const { atualTyping } = this.state;
 
     if (prevState.atualTyping !== atualTyping) return this.makeCalc();
+
+    return null;
   }
 
   addNumber = e => {
@@ -45,13 +48,30 @@ export default class Calculator extends Component {
   addOperator = expressionSymbol => {
     const { atualTyping, numberInMemory } = this.state;
 
+    if (expressionSymbol === 'c') {
+      return this.setState({
+        numberInMemory: [],
+        atualTyping: 0,
+        total: 0,
+      });
+    }
+
+    if (expressionSymbol === '=') {
+      this.setState({
+        numberInMemory: [...numberInMemory, atualTyping],
+        atualTyping: '',
+      });
+
+      return this.makeCalc();
+    }
+
     if (!numberInMemory[0]) {
       return this.setState({
         numberInMemory: [atualTyping, expressionSymbol],
         atualTyping: 0,
       });
     }
-    this.setState({
+    return this.setState({
       numberInMemory: [...numberInMemory, atualTyping, expressionSymbol],
       atualTyping: 0,
     });
@@ -94,10 +114,16 @@ export default class Calculator extends Component {
         </Result>
 
         <CalculatorKeyboard darkMode={darkMode}>
-          <button type="button" className="c">
+          <button
+            type="button"
+            onClick={() => this.addOperator('c')}
+            className="c"
+          >
             C
           </button>
-          <span />
+          <button type="button" onClick={() => this.addOperator('<')}>
+            <FaAngleLeft />
+          </button>
           <button type="button" onClick={() => this.addOperator('%')}>
             <FaPercent />
           </button>
@@ -150,7 +176,7 @@ export default class Calculator extends Component {
           <button type="button" onClick={e => this.addNumber(e)}>
             .
           </button>
-          <button type="button">
+          <button type="button" onClick={() => this.addOperator('=')}>
             <FaEquals />
           </button>
         </CalculatorKeyboard>
