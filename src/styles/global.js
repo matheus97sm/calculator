@@ -15,8 +15,12 @@ const Global = createGlobalStyle`
     height: 100%;
   }
 
-  body.dark {
-    background-color: #0A1B43;
+  body {
+    overflow-x: hidden;
+
+    &.dark {
+      background-color: #0A1B43;
+    }
   }
 
   body, input, button {

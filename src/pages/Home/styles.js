@@ -14,6 +14,17 @@ export const Container = styled.div`
   svg {
     color: ${props => (props.darkMode ? lightBlue : blue)};
     font-size: 20px;
+    cursor: pointer;
+  }
+
+  @media screen and (min-width: 1050px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > div {
+      width: 40%;
+    }
   }
 `;
 
@@ -33,6 +44,20 @@ export const TextWrapper = styled.div`
     color: ${props => (props.darkMode ? lightGrey : grey)};
     font-size: 4.5vw;
     line-height: 6.5vw;
+  }
+
+  @media screen and (min-width: 1050px) {
+    h1 {
+      font-size: 48px;
+    }
+
+    p,
+    a {
+      max-width: 70%;
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 26px;
+    }
   }
 `;
 
@@ -54,6 +79,17 @@ export const ImageWrapper = styled.div`
     width: 80vw;
     z-index: 9;
     transform: translate3d(15%, 0, 0);
+  }
+
+  @media screen and (min-width: 1050px) {
+    .circle,
+    .circleDarker {
+      width: 90%;
+    }
+
+    .illustration {
+      width: 80%;
+    }
   }
 `;
 

@@ -31,7 +31,11 @@ export default class Calculator extends Component {
   }
 
   addNumber = e => {
+    this.clickAnimation(e);
+
     const { atualTyping } = this.state;
+
+    if (atualTyping.length >= 8) return;
 
     const newNumber =
       atualTyping !== 0 ? atualTyping + e.target.innerText : e.target.innerText;
@@ -45,7 +49,24 @@ export default class Calculator extends Component {
     });
   };
 
-  addOperator = expressionSymbol => {
+  removeNumber = e => {
+    this.clickAnimation(e);
+
+    const { atualTyping } = this.state;
+
+    const newNumber =
+      atualTyping !== 0 && atualTyping.length > 1
+        ? atualTyping.slice(0, atualTyping.length - 1)
+        : 0;
+
+    this.setState({
+      atualTyping: newNumber,
+    });
+  };
+
+  addOperator = (expressionSymbol, e) => {
+    this.clickAnimation(e);
+
     const { atualTyping, numberInMemory } = this.state;
 
     if (expressionSymbol === 'c') {
@@ -99,13 +120,23 @@ export default class Calculator extends Component {
     });
   };
 
+  clickAnimation = e => {
+    const { currentTarget } = e;
+
+    currentTarget.classList.add('animate');
+
+    return setTimeout(() => {
+      currentTarget.classList.remove('animate');
+    }, 200);
+  };
+
   render() {
     const { numberInMemory, atualTyping, total } = this.state;
     const { darkMode } = this.props;
 
     return (
       <Container darkMode={darkMode}>
-        <Result darkMode={darkMode}>
+        <Result darkMode={darkMode} total={total}>
           <small>
             {numberInMemory.map(atual => `${atual} `)}
             {atualTyping}
@@ -116,18 +147,18 @@ export default class Calculator extends Component {
         <CalculatorKeyboard darkMode={darkMode}>
           <button
             type="button"
-            onClick={() => this.addOperator('c')}
+            onClick={e => this.addOperator('c', e)}
             className="c"
           >
             C
           </button>
-          <button type="button" onClick={() => this.addOperator('<')}>
+          <button type="button" onClick={e => this.removeNumber(e)}>
             <FaAngleLeft />
           </button>
-          <button type="button" onClick={() => this.addOperator('%')}>
+          <button type="button" onClick={e => this.addOperator('%', e)}>
             <FaPercent />
           </button>
-          <button type="button" onClick={() => this.addOperator('÷')}>
+          <button type="button" onClick={e => this.addOperator('÷', e)}>
             <FaDivide />
           </button>
           <button type="button" onClick={e => this.addNumber(e)}>
@@ -139,7 +170,7 @@ export default class Calculator extends Component {
           <button type="button" onClick={e => this.addNumber(e)}>
             9
           </button>
-          <button type="button" onClick={() => this.addOperator('×')}>
+          <button type="button" onClick={e => this.addOperator('×', e)}>
             <FaTimes />
           </button>
           <button type="button" onClick={e => this.addNumber(e)}>
@@ -151,7 +182,7 @@ export default class Calculator extends Component {
           <button type="button" onClick={e => this.addNumber(e)}>
             6
           </button>
-          <button type="button" onClick={() => this.addOperator('+')}>
+          <button type="button" onClick={e => this.addOperator('+', e)}>
             <FaPlus />
           </button>
           <button type="button" onClick={e => this.addNumber(e)}>
@@ -163,7 +194,7 @@ export default class Calculator extends Component {
           <button type="button" onClick={e => this.addNumber(e)}>
             3
           </button>
-          <button type="button" onClick={() => this.addOperator('-')}>
+          <button type="button" onClick={e => this.addOperator('-', e)}>
             <FaMinus />
           </button>
           <button
@@ -176,7 +207,7 @@ export default class Calculator extends Component {
           <button type="button" onClick={e => this.addNumber(e)}>
             .
           </button>
-          <button type="button" onClick={() => this.addOperator('=')}>
+          <button type="button" onClick={e => this.addOperator('=', e)}>
             <FaEquals />
           </button>
         </CalculatorKeyboard>
